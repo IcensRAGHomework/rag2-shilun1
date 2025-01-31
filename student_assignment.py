@@ -15,4 +15,17 @@ def hw02_1(q1_pdf):
 
 
 def hw02_2(q2_pdf):
-    pass
+    loader = PyPDFLoader(q2_pdf)
+    docs = loader.load()
+    full_text = "\n".join([doc.page_content for doc in docs])
+    splitter = RecursiveCharacterTextSplitter(
+        chunk_overlap=0,
+        chunk_size=10,
+        is_separator_regex=True,
+        separators=[
+            r"\n\s*第\s*[一二三四五六七八九十]{1,3}\s*章",
+            r"\n第\s*\d+-?\d*\s*條"
+        ]
+    )
+    chunks = splitter.split_text(full_text)
+    return len(chunks)
